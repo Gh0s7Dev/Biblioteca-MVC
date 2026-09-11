@@ -1,0 +1,17 @@
+﻿@model BibliotecaMVC.Models.ServiceCard
+
+@{
+    var cardTitle = ViewData["CardTitle"]?.ToString() ?? "Información";
+}
+
+<article class="info-card">
+
+    <h3>
+        @cardTitle
+    </h3>
+
+    <p>
+        @Model.Text
+    </p>
+
+</article>

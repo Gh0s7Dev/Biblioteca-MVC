@@ -1,21 +1,38 @@
-﻿<header class="about-header">
+﻿@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<header class="about-header">
+
     <div class="container">
-        <h1>Acerca de la Biblioteca Virtual</h1>
+
+        <h1>
+            Acerca de la Biblioteca Virtual
+        </h1>
+
         <p>
             Conoce nuestra biblioteca, nuestros servicios y nuestro compromiso
             con el acceso al conocimiento.
         </p>
+
     </div>
+
 </header>
 
 
 <main>
 
-    <!-- Información principal -->
+    <!-- ================================
+         INFORMACIÓN PRINCIPAL
+         ================================ -->
+
     <section class="about-container container">
 
         <article class="about-content">
-            <h2>¿Quiénes somos?</h2>
+
+            <h2>
+                ¿Quiénes somos?
+            </h2>
 
             <p>
                 Somos una biblioteca virtual dedicada a facilitar el acceso
@@ -29,63 +46,98 @@
                 con libros, autores y categorías literarias, ofreciendo una
                 experiencia accesible desde diferentes dispositivos.
             </p>
+
         </article>
 
 
-        <aside class="about-info">
-
-            <h3>Misión</h3>
-
-            <p>
-                Proporcionar un espacio digital que facilite el acceso a la
-                información y fomente la lectura, el aprendizaje y el
-                conocimiento.
-            </p>
-
-            <h3>Visión</h3>
-
-            <p>
-                Ser una biblioteca virtual moderna y accesible que contribuya
-                al desarrollo educativo y cultural de sus usuarios.
-            </p>
-
-        </aside>
+        <!-- COMPONENTE REUTILIZABLE 1 -->
+        @await Html.PartialAsync(
+                    "_InfoCard",
+                    new BibliotecaMVC.Models.ServiceCard
+                    {
+                        Text = "Proporcionar un espacio digital que facilite el acceso a la información y fomente la lectura, el aprendizaje y el conocimiento."
+                    },
+                    new ViewDataDictionary<BibliotecaMVC.Models.ServiceCard>(ViewData)
+                    {
+                        ["CardTitle"] = "Misión"
+                    }
+                )
 
     </section>
 
 
-    <!-- Servicios -->
+    <!-- ================================
+         VISIÓN
+         ================================ -->
+
+    <section class="container mb-5">
+
+        <!-- COMPONENTE REUTILIZABLE 2 -->
+        @await Html.PartialAsync(
+                    "_InfoCard",
+                    new BibliotecaMVC.Models.ServiceCard
+                    {
+                        Text = "Ser una biblioteca virtual moderna y accesible que contribuya al desarrollo educativo y cultural de sus usuarios."
+                    },
+                    new ViewDataDictionary<BibliotecaMVC.Models.ServiceCard>(ViewData)
+                    {
+                        ["CardTitle"] = "Visión"
+                    }
+                )
+
+    </section>
+
+
+    <!-- ================================
+         ACTIVIDAD 4 - COMPONENTES
+         REUTILIZABLES
+         ================================ -->
+
     <section class="services-section">
 
         <div class="container">
 
-            <h2>¿Qué ofrecemos?</h2>
+            <h2>
+                ¿Qué ofrecemos?
+            </h2>
 
             <div class="services-grid">
 
-                <article class="service-card">
-                    <h3>Catálogo de libros</h3>
-                    <p>
-                        Consulta libros disponibles y encuentra información
-                        sobre sus autores y categorías.
-                    </p>
-                </article>
+                @await Html.PartialAsync(
+                    "_InfoCard",
+                    new BibliotecaMVC.Models.ServiceCard
+                    {
+                        Text = "Consulta libros disponibles y encuentra información sobre sus autores y categorías."
+                    },
+                    new ViewDataDictionary<BibliotecaMVC.Models.ServiceCard>(ViewData)
+                    {
+                        ["CardTitle"] = "Catálogo de libros"
+                    }
+                )
 
-                <article class="service-card">
-                    <h3>Autores</h3>
-                    <p>
-                        Conoce diferentes autores y consulta información
-                        relacionada con sus obras.
-                    </p>
-                </article>
+                @await Html.PartialAsync(
+                    "_InfoCard",
+                    new BibliotecaMVC.Models.ServiceCard
+                    {
+                        Text = "Conoce diferentes autores y consulta información relacionada con sus obras."
+                    },
+                    new ViewDataDictionary<BibliotecaMVC.Models.ServiceCard>(ViewData)
+                    {
+                        ["CardTitle"] = "Autores"
+                    }
+                )
 
-                <article class="service-card">
-                    <h3>Categorías</h3>
-                    <p>
-                        Explora los libros organizados en diferentes
-                        categorías literarias.
-                    </p>
-                </article>
+                @await Html.PartialAsync(
+                    "_InfoCard",
+                    new BibliotecaMVC.Models.ServiceCard
+                    {
+                        Text = "Explora los libros organizados en diferentes categorías literarias."
+                    },
+                    new ViewDataDictionary<BibliotecaMVC.Models.ServiceCard>(ViewData)
+                    {
+                        ["CardTitle"] = "Categorías"
+                    }
+                )
 
             </div>
 
@@ -94,16 +146,21 @@
     </section>
 
 
-    <!-- Imagen -->
+    <!-- ================================
+         IMAGEN
+         ================================ -->
+
     <section class="team-section container">
 
         <figure>
+
             <img src="https://picsum.photos/900/350"
                  alt="Interior de una biblioteca virtual">
 
             <figcaption>
                 Biblioteca Virtual desarrollada con ASP.NET Core MVC
             </figcaption>
+
         </figure>
 
     </section>
