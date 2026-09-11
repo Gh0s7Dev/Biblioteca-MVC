@@ -266,3 +266,63 @@ body {
         padding: 40px 15px;
     }
 }
+
+/* ================================
+            SEMANA 5
+   ================================ */
+
+.section{
+    border: 1px solid red;
+    padding: 10px;
+    margin: 20px;
+}
+
+.contenedor{
+    border: 1px solid blue;
+    padding: 5px
+}
+
+.card-demo {
+    border: 1px solid black;
+}
+
+/*Media Queries*/
+.media-query{
+    display: flex;
+    gap: 20px;
+}
+
+.media-query .card-demo {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .media-query {
+        flex-direction: column;
+    }
+}
+
+/*CSS Grid*/
+.grid-layout{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+    .grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/*CSS Flexbox*/
+.flex-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.flex-layout .card-demo{
+    width: 300px;
+}

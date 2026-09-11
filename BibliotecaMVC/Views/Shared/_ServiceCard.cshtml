@@ -1,0 +1,24 @@
+﻿<!-- Servicio 1 -->
+@model BibliotecaMVC.Models.ServiceCard
+
+<div class="card-demo">
+    <div class="card h-100 shadow-sm">
+        <img src="@Model.ImageUrl"
+             class="card-img-top"
+             alt="Préstamo de libros">
+
+        <div class="card-body text-center">
+            <h5 class="card-title">Préstamo de libros</h5>
+
+            <p class="card-text">
+                @Model.Text
+            </p>
+
+            <a asp-controller="Libros"
+               asp-action="Index"
+               class="btn btn-outline-primary">
+                Ver Libros
+            </a>
+        </div>
+    </div>
+</div>
