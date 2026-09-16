@@ -1,51 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BibliotecaMVC.Models;
+using BibliotecaMVC.Repositories;
 
 namespace BibliotecaMVC.Controllers
 {
     public class LibrosController : Controller
     {
-        private static List<Libro> _libros = new List<Libro>
+        private readonly IRepositorioLibro _repositorio;
+
+        public LibrosController(IRepositorioLibro repositorio)
         {
-            new Libro
-            {
-                ID = 1,
-                Titulo = "Cien años de soledad",
-                Autor = "Gabriel García Márquez",
-                Categoria = "Novela",
-                Precio = 25.00m,
-                Disponible = true
-            },
-            new Libro
-            {
-                ID = 2,
-                Titulo = "El principito",
-                Autor = "Antoine de Saint-Exupéry",
-                Categoria = "Literatura",
-                Precio = 15.50m,
-                Disponible = true
-            },
-            new Libro
-            {
-                ID = 3,
-                Titulo = "1984",
-                Autor = "George Orwell",
-                Categoria = "Ciencia ficción",
-                Precio = 20.00m,
-                Disponible = false
-            }
-        };
+            _repositorio = repositorio;
+        }
+        
 
         // Listar libros
         public IActionResult Index()
         {
-            return View(_libros);
+            var libros = _repositorio.ObtenerTodos();
+            return View(libros);
         }
 
         // Ver detalle
         public IActionResult Details(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.ID == id);
+            var libros = _repositorio.ObtenerTodos();
+            var libro = libros.FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
@@ -71,16 +51,13 @@ namespace BibliotecaMVC.Controllers
                 return View(libro);
             }
 
-            if (_libros.Any())
-            {
-                libro.ID = _libros.Max(l => l.ID) + 1;
-            }
-            else
-            {
-                libro.ID = 1;
-            }
+            var libros = _repositorio.ObtenerTodos();
 
-            _libros.Add(libro);
+            libro.ID = libros.Any()
+                ? libros.Max(l => l.ID) + 1
+                : 1;
+
+            _repositorio.Agregar(libro);
 
             return RedirectToAction(nameof(Index));
         }
@@ -88,7 +65,8 @@ namespace BibliotecaMVC.Controllers
         // Mostrar formulario para editar
         public IActionResult Edit(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.ID == id);
+            var libros = _repositorio.ObtenerTodos();
+            var libro = libros.FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
@@ -113,7 +91,8 @@ namespace BibliotecaMVC.Controllers
                 return View(libro);
             }
 
-            var libroExistente = _libros.FirstOrDefault(l => l.ID == id);
+            var libros = _repositorio.ObtenerTodos();
+            var libroExistente = libros.FirstOrDefault(l => l.ID == id);
 
             if (libroExistente == null)
             {
@@ -132,7 +111,8 @@ namespace BibliotecaMVC.Controllers
         // Confirmar eliminación
         public IActionResult Delete(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.ID == id);
+            var libros = _repositorio.ObtenerTodos();
+            var libro = libros.FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
@@ -147,14 +127,15 @@ namespace BibliotecaMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.ID == id);
+            var libros = _repositorio.ObtenerTodos();
+            var libro = libros.FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
                 return NotFound();
             }
 
-            _libros.Remove(libro);
+            _repositorio.Eliminar(libro);
 
             return RedirectToAction(nameof(Index));
         }
