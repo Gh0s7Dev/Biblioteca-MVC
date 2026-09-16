@@ -17,6 +17,18 @@
                     <h5>@autor.Nombre @autor.Apellido</h5>
                     <h6>@autor.Nacionalidad</h6>
                     <p>Edad : @(DateTime.Now.Year - autor.FechaNacimiento.Year)</p>
+                    @if (autor.Activo)
+                    {
+                        <p>
+                            <span class="badge bg-success">Activo</span>
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            <span class="badge bg-secondary">Inactivo</span>
+                        </p>
+                    }
 
                     <a asp-action="Details" asp-route-id="@autor.ID">Ver</a>
                     <a asp-action="Edit" asp-route-id="@autor.ID">Editar</a>

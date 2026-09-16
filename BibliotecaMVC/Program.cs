@@ -1,4 +1,5 @@
 using BibliotecaMVC.Repositories;
+using BibliotecaMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IRepositorioLibro, RepositorioEnMemoria>();
+builder.Services.AddScoped<IAutorService, AutorService>();
 
 var app = builder.Build();
 
