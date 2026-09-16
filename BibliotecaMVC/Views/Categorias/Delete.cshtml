@@ -1,0 +1,35 @@
+﻿@model BibliotecaMVC.Models.Categoria
+
+@{
+    ViewData["Title"] = "Eliminar Categoría";
+}
+
+<h2>Eliminar Categoría</h2>
+
+<div class="alert alert-warning">
+    ¿Está seguro de que desea eliminar esta categoría?
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Nombre</h5>
+
+        <p class="card-text">
+            @Model.Descripcion
+        </p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="ID" />
+
+    <button type="submit" class="btn btn-danger">
+        Sí, eliminar
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancelar
+    </a>
+
+</form>

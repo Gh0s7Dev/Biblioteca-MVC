@@ -22,10 +22,10 @@
                 @Model.Text
             </p>
 
-            <a asp-controller="Libros"
-               asp-action="Index"
+            <a asp-controller="@Model.Controller"
+               asp-action="@Model.Action"
                class="btn btn-outline-primary">
-                Ver Libros
+                @Model.ButtonText
             </a>
 
         </div>

@@ -7,15 +7,23 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Listado de Categorías</h2>
 </div>
-<a class="btn btn-primary" asp-controller="Categorias" asp-action="Create">Agregar categoría</a>
+
+<a class="btn btn-primary mb-3"
+   asp-controller="Categorias"
+   asp-action="Create">
+    Agregar categoría
+</a>
+
 <table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
+            <th>Acciones</th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var categoria in Model)
         {
@@ -23,6 +31,20 @@
                 <td>@categoria.ID</td>
                 <td>@categoria.Nombre</td>
                 <td>@categoria.Descripcion</td>
+
+                <td>
+                    <a class="btn btn-sm btn-primary"
+                       asp-action="Edit"
+                       asp-route-id="@categoria.ID">
+                        Editar
+                    </a>
+
+                    <a class="btn btn-sm btn-outline-danger"
+                       asp-action="Delete"
+                       asp-route-id="@categoria.ID">
+                        Eliminar
+                    </a>
+                </td>
             </tr>
         }
     </tbody>
@@ -31,6 +53,7 @@
 @section Scripts {
     <script>
         var mensaje = '@(TempData["SuccessMessage"] ?? "")';
+
         if (mensaje) {
             Swal.fire({
                 icon: 'success',
