@@ -11,11 +11,6 @@ namespace BibliotecaMVC.Controllers
             return View();
         }
 
-        public IActionResult Categorías()
-        {
-            return View();
-        }
-
         public IActionResult Préstamos()
         {
             return View();
