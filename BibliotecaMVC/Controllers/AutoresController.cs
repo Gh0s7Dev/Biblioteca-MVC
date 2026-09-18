@@ -98,7 +98,7 @@ namespace BibliotecaMVC.Controllers
             return View(autor);
         }
 
-        // POST: Autores/Delete/
+        // POST: Autores/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -112,6 +112,9 @@ namespace BibliotecaMVC.Controllers
 
             _context.Autores.Remove(autor);
             _context.SaveChanges();
+
+            TempData["SuccessMessage"] =
+                "Autor eliminado correctamente.";
 
             return RedirectToAction(nameof(Index));
         }
