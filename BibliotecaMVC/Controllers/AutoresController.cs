@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BibliotecaMVC.Data;
+using Microsoft.AspNetCore.Mvc;
 using BibliotecaMVC.Models;
 using BibliotecaMVC.Services;
 
@@ -6,23 +7,23 @@ namespace BibliotecaMVC.Controllers
 {
     public class AutoresController : Controller
     {
-        private readonly IAutorService _autorService;
+        private readonly BibliotecaContext _context;
 
-        public AutoresController(IAutorService autorService)
+        public AutoresController(BibliotecaContext context)
         {
-            _autorService = autorService;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            var autores = _autorService.ObtenerTodos();
+            var autores = _context.Autores.ToList();
 
             return View(autores);
         }
 
         public IActionResult Details(int id)
         {
-            var autor = _autorService.ObtenerPorId(id);
+            var autor = _context.Autores.FirstOrDefault(a => a.ID == id);
 
             if (autor == null)
             {
@@ -46,14 +47,15 @@ namespace BibliotecaMVC.Controllers
                 return View(autor);
             }
 
-            _autorService.Agregar(autor);
+            _context.Autores.Add(autor);
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Edit(int id)
         {
-            var autor = _autorService.ObtenerPorId(id);
+            var autor = _context.Autores.FirstOrDefault(a => a.ID == id);
 
             if (autor == null)
             {
@@ -77,12 +79,8 @@ namespace BibliotecaMVC.Controllers
                 return View(autor);
             }
 
-            var actualizado = _autorService.Actualizar(autor);
-
-            if (!actualizado)
-            {
-                return NotFound();
-            }
+            _context.Autores.Update(autor);
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -90,7 +88,7 @@ namespace BibliotecaMVC.Controllers
         // GET: Autores/Delete/
         public IActionResult Delete(int id)
         {
-            var autor = _autorService.ObtenerPorId(id);
+            var autor = _context.Autores.FirstOrDefault(a => a.ID == id);
 
             if (autor == null)
             {
@@ -105,12 +103,15 @@ namespace BibliotecaMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var eliminado = _autorService.Eliminar(id);
+            var autor = _context.Autores.FirstOrDefault(a => a.ID == id);
 
-            if (!eliminado)
+            if (autor == null)
             {
                 return NotFound();
             }
+
+            _context.Autores.Remove(autor);
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
