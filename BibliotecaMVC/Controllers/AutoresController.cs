@@ -85,25 +85,12 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Autores/Delete/
-        public IActionResult Delete(int id)
-        {
-            var autor = _context.Autores.FirstOrDefault(a => a.ID == id);
-
-            if (autor == null)
-            {
-                return NotFound();
-            }
-
-            return View(autor);
-        }
-
         // POST: Autores/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var autor = _context.Autores.FirstOrDefault(a => a.ID == id);
+            var autor = await _context.Autores.FindAsync(id);
 
             if (autor == null)
             {
@@ -111,10 +98,7 @@ namespace BibliotecaMVC.Controllers
             }
 
             _context.Autores.Remove(autor);
-            _context.SaveChanges();
-
-            TempData["SuccessMessage"] =
-                "Autor eliminado correctamente.";
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

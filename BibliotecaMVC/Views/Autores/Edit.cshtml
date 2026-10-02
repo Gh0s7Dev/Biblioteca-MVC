@@ -6,7 +6,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" class="swal-save-form">
 
     <input type="hidden" asp-for="ID" />
 
@@ -40,12 +40,7 @@
         <span asp-validation-for="Activo"></span>
     </div>
 
-    <button type="submit" class="btn btn-warning">
-        Guardar cambios
-    </button>
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Cancelar
-    </a>
+    <button type="submit" class="btn btn-warning">Guardar cambios</button>
+    <a asp-action="Index" class="btn btn-secondary swal-save-form">Cancelar</a>
 
 </form>
