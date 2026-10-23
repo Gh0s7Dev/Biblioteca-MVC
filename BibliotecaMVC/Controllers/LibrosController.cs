@@ -1,4 +1,5 @@
-﻿using BibliotecaMVC.Data;
+﻿
+using BibliotecaMVC.Data;
 using BibliotecaMVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,16 +16,17 @@ namespace BibliotecaMVC.Controllers
             _context = context;
         }
 
+        // Cualquier usuario autenticado puede consultar.
         public IActionResult Index()
         {
             var libros = _context.Libros.ToList();
-
             return View(libros);
         }
 
         public IActionResult Details(int id)
         {
-            var libro = _context.Libros.FirstOrDefault(l => l.ID == id);
+            var libro = _context.Libros
+                .FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
@@ -34,6 +36,8 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
+        // Solo Administrador puede crear.
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create()
         {
             return View();
@@ -41,6 +45,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Create(Libro libro)
         {
             if (!ModelState.IsValid)
@@ -54,9 +59,12 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Solo Administrador puede editar.
+        [Authorize(Roles = "Administrador")]
         public IActionResult Edit(int id)
         {
-            var libro = _context.Libros.FirstOrDefault(l => l.ID == id);
+            var libro = _context.Libros
+                .FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
@@ -68,6 +76,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public IActionResult Edit(int id, Libro libro)
         {
             if (id != libro.ID)
@@ -86,9 +95,12 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Solo Administrador puede acceder a la confirmación.
+        [Authorize(Roles = "Administrador")]
         public IActionResult Delete(int id)
         {
-            var libro = _context.Libros.FirstOrDefault(l => l.ID == id);
+            var libro = _context.Libros
+                .FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
@@ -98,12 +110,14 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
-        // POST: Libros/Delete
+        // También se protege la operación POST de eliminación.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var libro = _context.Libros.FirstOrDefault(l => l.ID == id);
+            var libro = _context.Libros
+                .FirstOrDefault(l => l.ID == id);
 
             if (libro == null)
             {
