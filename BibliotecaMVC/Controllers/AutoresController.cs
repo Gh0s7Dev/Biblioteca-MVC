@@ -35,6 +35,7 @@ namespace BibliotecaMVC.Controllers
             return View(autor);
         }
 
+        [Authorize(Roles = "Administrador, Bibliotecario")]
         public IActionResult Create()
         {
             return View();
@@ -42,6 +43,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador, Bibliotecario")]
         public IActionResult Create(Autor autor)
         {
             if (!ModelState.IsValid)
@@ -54,7 +56,8 @@ namespace BibliotecaMVC.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
+        
+        [Authorize(Roles = "Administrador, Bibliotecario")]
         public IActionResult Edit(int id)
         {
             var autor = _context.Autores.FirstOrDefault(a => a.ID == id);
@@ -69,6 +72,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador, Bibliotecario")]
         public IActionResult Edit(int id, Autor autor)
         {
             if (id != autor.ID)
@@ -90,6 +94,7 @@ namespace BibliotecaMVC.Controllers
         // POST: Autores/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador, Bibliotecario")]
         public async Task<IActionResult> Delete(int id)
         {
             var autor = await _context.Autores.FindAsync(id);

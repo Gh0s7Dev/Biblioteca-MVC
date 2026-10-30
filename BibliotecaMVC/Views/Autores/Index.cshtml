@@ -13,7 +13,10 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">@ViewData["Title"] <small class="text-muted">(@Model.Count())</small></h1>
-    <a class="btn btn-primary" asp-action="Create">Nuevo Autor +</a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Bibliotecario"))
+    {
+        <a class="btn btn-primary" asp-action="Create">Nuevo Autor +</a>
+    }
 </div>
 
 
@@ -42,12 +45,18 @@
                     <div class="nt-auto d-flex justify-content-between align-items-center">
                         <div>
                             <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@autor.ID">Detalles</a>
-                            <a class="btn btn-outline-secondary swal-edit-link" asp-action="Edit" asp-route-id="@autor.ID">Editar</a>
+                            @if (User.IsInRole("Administrador") || User.IsInRole("Bibliotecario"))
+                            {
+                                <a class="btn btn-outline-secondary swal-edit-link" asp-action="Edit" asp-route-id="@autor.ID">Editar</a>
+                            }
                         </div>
-                        <form asp-action="Delete" asp-route-id="@autor.ID" method="post" class="swal-delete-form d-inline">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <form asp-action="Delete" asp-route-id="@autor.ID" method="post" class="swal-delete-form d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        }
                     </div>
                 </div>
             </div>
