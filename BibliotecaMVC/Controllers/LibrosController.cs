@@ -37,7 +37,7 @@ namespace BibliotecaMVC.Controllers
         }
 
         // Solo Administrador puede crear.
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Bibliotecario")]
         public IActionResult Create()
         {
             return View();
@@ -45,7 +45,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Bibliotecario")]
         public IActionResult Create(Libro libro)
         {
             if (!ModelState.IsValid)
@@ -60,7 +60,7 @@ namespace BibliotecaMVC.Controllers
         }
 
         // Solo Administrador puede editar.
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Bibliotecario")]
         public IActionResult Edit(int id)
         {
             var libro = _context.Libros
@@ -76,7 +76,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Bibliotecario")]
         public IActionResult Edit(int id, Libro libro)
         {
             if (id != libro.ID)
@@ -96,7 +96,7 @@ namespace BibliotecaMVC.Controllers
         }
 
         // Solo Administrador puede acceder a la confirmación.
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Bibliotecario")]
         public IActionResult Delete(int id)
         {
             var libro = _context.Libros
@@ -113,7 +113,7 @@ namespace BibliotecaMVC.Controllers
         // También se protege la operación POST de eliminación.
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Bibliotecario")]
         public IActionResult DeleteConfirmed(int id)
         {
             var libro = _context.Libros

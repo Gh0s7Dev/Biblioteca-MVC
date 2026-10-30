@@ -16,7 +16,10 @@
 
 <p>Hay @Model.Count() libros registrados.</p>
 
-<a class="btn btn-primary mb-3" asp-action="Create">Nuevo Libro +</a>
+@if (User.IsInRole("Administrador") || User.IsInRole("Bibliotecario"))
+{
+    <a class="btn btn-primary mb-3" asp-action="Create">Nuevo Libro +</a>
+}
 
 <div class="row">
     @foreach (var libro in Model)
@@ -51,18 +54,20 @@
                         Ver
                     </a>
 
-                    <a class="btn btn-warning"
-                       asp-action="Edit"
-                       asp-route-id="@libro.ID">
-                        Editar
-                    </a>
+                    @if (User.IsInRole("Administrador") || User.IsInRole("Bibliotecario"))
+                    {
+                        <a class="btn btn-warning"
+                           asp-action="Edit"
+                           asp-route-id="@libro.ID">
+                            Editar
+                        </a>
 
-                    <a class="btn btn-outline-danger"
-                       asp-action="Delete"
-                       asp-route-id="@libro.ID">
-                        Eliminar
-                    </a>
-
+                        <a class="btn btn-outline-danger"
+                           asp-action="Delete"
+                           asp-route-id="@libro.ID">
+                            Eliminar
+                        </a>
+                    }
                 </div>
             </div>
         </div>

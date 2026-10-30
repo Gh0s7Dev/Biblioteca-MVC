@@ -34,12 +34,15 @@
                 <span class="text-danger">No</span>
             }
         </p>
-
-        <a asp-action="Edit"
-           asp-route-id="@Model.ID"
-           class="btn btn-warning">
-            Editar
-        </a>
+        
+        @if (User.IsInRole("Administrador") || User.IsInRole("Bibliotecario"))
+        {
+            <a asp-action="Edit"
+               asp-route-id="@Model.ID"
+               class="btn btn-warning">
+                Editar
+            </a>
+        }
 
         <a asp-action="Index"
            class="btn btn-secondary">
