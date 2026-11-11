@@ -7,6 +7,7 @@ namespace BibliotecaMVC.Controllers
 {
     public class HomeController : Controller
     {
+
         [AllowAnonymous]
         public IActionResult Index()
         {
