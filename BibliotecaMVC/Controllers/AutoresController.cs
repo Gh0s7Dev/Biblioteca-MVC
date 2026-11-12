@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using BibliotecaMVC.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace BibliotecaMVC.Controllers
 {
@@ -34,6 +38,117 @@ namespace BibliotecaMVC.Controllers
                 _logger.LogError(ex, "Ocurrió un error al consultar el listado de autores.");
                 throw;   
             }
+        }
+
+        public async Task<IActionResult> Reporte()
+        {
+            var autores = await _context.Autores
+                   .AsNoTracking()
+                   .OrderBy(a => a.Nombre)
+                   .ToListAsync();
+
+            return File(GenerarReporte(autores), "application/pdf");
+        }
+
+        public async Task<IActionResult> DescargarReporte()
+        {
+            var autores = await _context.Autores
+                   .AsNoTracking()
+                   .OrderBy(a => a.Nombre)
+                   .ToListAsync();
+            
+            return File(GenerarReporte(autores), "application/pdf", "reporte-autores.pdf");
+        }
+
+        private static byte[] GenerarReporte(IReadOnlyCollection<Autor> autores)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            return Document.Create(document => document.Page(page =>
+            {
+                page.Size(PageSizes.Letter);
+                page.Margin(42);
+                page.PageColor(Colors.Grey.Lighten5);
+
+                page.Header().Column(column =>
+                {
+                    column.Item().Text("BIBLIOTECA UNIVERSITARIA")
+                    .FontSize(11)
+                    .Bold()
+                    .FontColor(Colors.Blue.Darken2);
+                    column.Item().Text("Reporte de autores")
+                    .FontSize(26)
+                    .Bold()
+                    .FontColor(Colors.Grey.Darken3);
+                    column.Item().Text($"Listado actualizado el {DateTime.Now:dd/MM/yyyy HH:mm}")
+                    .FontSize(10)
+                    .FontColor(Colors.Grey.Darken1);
+                    column.Item().PaddingTop(14).LineHorizontal(2).LineColor(Colors.Blue.Medium);
+                });
+                page.Content().PaddingVertical(22).Column(column =>
+                {
+                    column.Item().Background(Colors.Blue.Darken2).Padding(14).Row(row =>
+                    {
+                        row.RelativeItem().Text("Autores Registrados")
+                        .FontSize(11)
+                        .Bold()
+                        .FontColor(Colors.White);
+                        row.ConstantItem(45).AlignRight().Text(autores.Count.ToString())
+                        .FontSize(18)
+                        .Bold()
+                        .FontColor(Colors.White);
+                    });
+
+                    column.Item().PaddingTop(18).Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.ConstantColumn(42);
+                            columns.RelativeColumn(2.4f);
+                            columns.RelativeColumn(1.5f);
+                            columns.RelativeColumn(1.3f);
+                        });
+
+                        table.Header(header =>
+                        {
+                            header.Cell().Element(HeaderCellStyle).Text("ID");
+                            header.Cell().Element(HeaderCellStyle).Text("NOMBRE");
+                            header.Cell().Element(HeaderCellStyle).Text("NACIONALIDAD");
+                            header.Cell().Element(HeaderCellStyle).Text("NACIMIENTO");
+                        });
+
+                        foreach (var autor in autores)
+                        {
+                            table.Cell().Element(BodyCellStyle).Text(autor.ID.ToString());
+                            table.Cell().Element(BodyCellStyle).Text(autor.Nombre);
+                            table.Cell().Element(BodyCellStyle).Text(autor.Nacionalidad ?? "No especificada");
+                            table.Cell().Element(BodyCellStyle).Text(autor.FechaNacimiento.ToString("dd/MM/yyyy"));
+                        }
+                    });
+                });
+
+                page.Footer().AlignCenter().Text(x =>
+                {
+                    x.Span("Biblioteca Universitaria - Página ");
+                    x.CurrentPageNumber();
+                    x.Span(" de ");
+                    x.TotalPages();
+                });
+            })).GeneratePdf();
+
+            static IContainer HeaderCellStyle(IContainer container) => container
+                .Background(Colors.Blue.Darken2)
+                .PaddingVertical(9)
+                .PaddingHorizontal(8)
+                .DefaultTextStyle(x => x.FontSize(9).Bold().FontColor(Colors.White));
+
+            static IContainer BodyCellStyle(IContainer container) => container
+                .Background(Colors.White)
+                .BorderBottom(1)
+                .BorderColor(Colors.Grey.Lighten2)
+                .PaddingVertical(9)
+                .PaddingHorizontal(8)
+                .DefaultTextStyle(x => x.FontSize(9).Bold().FontColor(Colors.Grey.Darken3));
         }
 
         public IActionResult Details(int id)
