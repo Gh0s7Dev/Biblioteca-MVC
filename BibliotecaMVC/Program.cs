@@ -28,6 +28,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddSingleton<IRepositorioLibro, RepositorioEnMemoria>();
 builder.Services.AddScoped<IAutorService, AutorService>();
+//builder.Services.AddScoped<ILibroService, LibroService>();
 
 var app = builder.Build();
 
